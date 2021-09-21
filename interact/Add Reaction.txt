@@ -1,0 +1,28 @@
+General:
+Request URL: https://discord.com/api/v9/channels/<CHANNEL ID>/messages/<MESSAGE ID>/reactions/%F0%9F%92%AF/%40me
+Request Method: PUT
+Status Code: 204
+==================================================================================================================================================================================================================
+Request Headers:
+:authority: discord.com
+:method: PUT
+:path: /api/v9/channels/889537520688332855/messages/889827530922684477/reactions/%F0%9F%92%AF/%40me
+:scheme: https
+accept: */*
+accept-encoding: gzip, deflate, br
+accept-language: en-GB
+authorization: <TOKEN>
+content-length: 0
+cookie: locale=en-GB; __dcfduid=240452b51af211eca9e542010a0a05fc; __sdcfduid=240452b51af211eca9e542010a0a05fcb331c3cdd53b60e373078252be7a8ccb4e33bcbed6973b61ca3e716cdb9d50f0
+origin: https://discord.com
+referer: https://discord.com/channels/<SERVER ID>/<CHANNEL ID>
+sec-fetch-dest: empty
+sec-fetch-mode: cors
+sec-fetch-site: same-origin
+user-agent: Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.15 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36
+x-debug-options: bugReporterEnabled
+x-super-properties: eyJvcyI6IkxpbnV4IiwiYnJvd3NlciI6IkRpc2NvcmQgQ2xpZW50IiwicmVsZWFzZV9jaGFubmVsIjoic3RhYmxlIiwiY2xpZW50X3ZlcnNpb24iOiIwLjAuMTUiLCJvc192ZXJzaW9uIjoiNS4xNC41LXplbjItMS16ZW4iLCJvc19hcmNoIjoieDY0Iiwic3lzdGVtX2xvY2FsZSI6ImVuLUdCIiwid2luZG93X21hbmFnZXIiOiJLRE
+
+{"message": "Unknown Emoji", "code": 10014} - Invalid Emoji
+
+204 - Emoji added succesfully
