@@ -56,23 +56,35 @@ func JoinServer(inviteCode string, token string) error {
 	client := &http.Client{
 		Timeout: 5 * time.Second,
 	}
+
 	res, err := client.Do(request)
 	if err != nil {
 		return err
 	}
+
 	body, err := ioutil.ReadAll(res.Body)
 	if err != nil {
 		return err
 	}
-	var responseJson map[string]interface{}
-	if err := json.Unmarshal(body, &responseJson); err != nil {
-		return err
+
+	switch res.StatusCode {
+	case 200:
+		var responseJson map[string]interface{}
+		if err := json.Unmarshal(body, &responseJson); err != nil {
+			return err
+		}
+		ParseServerID := responseJson["guild"].(map[string]interface{})
+		ServerID := ParseServerID["id"].(string)
+		ServerName := ParseServerID["name"].(string)
+		C.Set("JoinServerID", ServerID, cache.NoExpiration)
+		fmt.Printf("%s %s %s\n", white(token), green("| Successfully Joined"), white(ServerName))
+	case 404:
+		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
+	case 401:
+		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
+	default:
+		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
 	}
-	ParseServerID := responseJson["guild"].(map[string]interface{})
-	ServerID := ParseServerID["id"].(string)
-	ServerName := ParseServerID["name"].(string)
-	C.Set("JoinServerInvite", ServerID, cache.NoExpiration)
-	fmt.Printf("%s %s %s", white(token), green("| Successfully Joined"), white(ServerName))
 
 	return nil
 }

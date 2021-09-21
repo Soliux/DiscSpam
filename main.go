@@ -3,6 +3,7 @@ package main
 // Token we are using for testing: ODg5NTUzMTY2MTU5NDUwMTY0.YUi7nA.6yXPQf3fWb-qFj6pncNP97Ie_pk
 // Invite to server for testing: https://discord.gg/7XZNPEcHza
 import (
+	"Raid-Client/interact"
 	"Raid-Client/server"
 	"log"
 	"time"
@@ -15,7 +16,12 @@ func main() {
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-	err := server.LeaveServer("889537520688332851", "ODg5NTUzMTY2MTU5NDUwMTY0.YUi7nA.6yXPQf3fWb-qFj6pncNP97Ie_pk")
+	// time.Sleep(3 * time.Second)
+	// err = server.LeaveServer("889537520688332851", "ODg5NTUzMTY2MTU5NDUwMTY0.YUi7nA.6yXPQf3fWb-qFj6pncNP97Ie_pk")
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	err := interact.SendMessage("889537520688332851", "889537520688332855", "ODg5NTUzMTY2MTU5NDUwMTY0.YUi7nA.6yXPQf3fWb-qFj6pncNP97Ie_pk", "Hello from other side")
 	if err != nil {
 		log.Fatal(err)
 	}

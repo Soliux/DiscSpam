@@ -11,7 +11,7 @@ Request Headers:
 accept: */*
 accept-encoding: gzip, deflate, br
 accept-language: en-GB
-authorization: ODY4OTYwMDI1ODQ5MjM3NTU1.YUOY8A.l8yv4MDS6C64s0TA-fcdGEPfmo4
+authorization: <TOKEN>
 content-length: 2
 content-type: application/json
 cookie: __dcfduid=f30a7f251a2c11ec8a4842010a0a0681; __sdcfduid=f30a7f251a2c11ec8a4842010a0a06816da921e8cf360dc4e76b7c601e0977746e32f2e0e20ad7dc3ebc65e17c70bbaf; locale=en-GB

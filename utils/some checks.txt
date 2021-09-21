@@ -1,1 +1,0 @@
-we are going to be generating fake device info for each request we do with a token in reality it probably does not matter but we will be doing it just as a safety measure.
