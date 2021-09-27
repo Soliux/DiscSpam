@@ -12,31 +12,30 @@ import (
 	"strings"
 	"time"
 
+	"github.com/gookit/color"
 	"github.com/patrickmn/go-cache"
 )
 
+var white = color.FgWhite.Render
+var red = color.FgRed.Render
+
 func main() {
-
-	reader := bufio.NewReader(os.Stdin)
-	fmt.Println("Simple Shell")
-	fmt.Println("---------------------")
-
 	for {
-		fmt.Print("-> ")
-		text, _ := reader.ReadString('\n')
-		// convert CRLF to LF
-		text = strings.Replace(text, "\n", "", -1)
-
-		if strings.Compare("hi", text) == 0 {
-			fmt.Println("hello, Yourself")
-		}
-
+		text := Input("")
+		spawner(text)
 	}
 
 }
 
-func init() {
-	server.C = cache.New(60*time.Minute, 120*time.Minute)
+func spawner(Tool string) {
+	switch Tool {
+	case "exit", ".exit", "EXIT", "close":
+		os.Exit(0)
+	case "help", "h", "HELP ME", "menu", "home", "HELP":
+		fmt.Printf("%s %s\n", white("1. Join Server - Params:"), red("<Invite Code>"))
+		fmt.Printf("%s %s\n", white("2. Leave Server - Params:"), red("<Server ID>"))
+		fmt.Printf("%s %s\n", white("3. Spam Message - Params:"), red("<Server ID> <Channel ID> <Message To Spam>"))
+	}
 }
 
 func Input(DisplayText string) string {
@@ -45,9 +44,17 @@ func Input(DisplayText string) string {
 		log.Fatal(err)
 	}
 	reader := bufio.NewReader(os.Stdin)
-	fmt.Printf("%s@%s: ", user.Name, DisplayText)
+	if DisplayText == "" {
+		fmt.Printf("%s@DiscSpam > ", user.Name)
+	} else {
+		fmt.Printf("%s > ", DisplayText)
+	}
 	text, _ := reader.ReadString('\n')
-	return text
+	return strings.Replace(text, "\n", "", -1)
+}
+
+func init() {
+	server.C = cache.New(60*time.Minute, 120*time.Minute)
 }
 
 // err := server.JoinServer("https://discord.gg/7XZNPEcHza", "ODg5NTUzMTY2MTU5NDUwMTY0.YUi7nA.6yXPQf3fWb-qFj6pncNP97Ie_pk")
