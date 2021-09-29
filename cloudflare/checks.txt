@@ -1,2 +1,0 @@
-In each request made to the discord api there is a cloudflare cookie that is passed along with it.
-`cookie: __dcfduid=f30a7f251a2c11ec8a4842010a0a0681; __sdcfduid=f30a7f251a2c11ec8a4842010a0a06816da921e8cf360dc4e76b7c601e0977746e32f2e0e20ad7dc3ebc65e17c70bbaf; locale=en-GB`
