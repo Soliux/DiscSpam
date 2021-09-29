@@ -30,7 +30,7 @@ This tool has been created in [Go](https://golang.org/). For the speed and concu
 
 ## Getting Started
 
-Getting started is really simple. Head over the the [release](www.google.com) page and download the correct version of the program for your operating system. 
+Getting started is really simple. Head over the the [release](https://github.com/Sympthey/DiscSpam/releases) page and download the correct version of the program for your operating system. 
 
 Once you have downloaded the correct version of the program just add all your discord tokens into the `tokens.txt` file and then run the program.
 
@@ -77,7 +77,7 @@ Once you have downloaded the correct version of the program just add all your di
 5. Create And Train Captcha Solver
 6. Support Fake Typing
 
-These are just some things I am going to be adding to the tool very soon. If you have any ideas feel free to open a [issue](https://github.com/Sympthey/Raid-Client/issues) request and let me know.
+These are just some things I am going to be adding to the tool very soon. If you have any ideas feel free to open a [issue](https://github.com/Sympthey/DiscSpam/issues) request and let me know.
     
 
 
