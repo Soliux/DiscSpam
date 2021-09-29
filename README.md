@@ -1,20 +1,12 @@
 <br/>
 <p align="center">
-  <a href="https://github.com/Sympthey/DiscSpam">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
-
-  <h3 align="center">DiscSpam</h3>
+  <h1 align="center">DiscSpam</h1>
 
   <p align="center">
     Fast, Free, Easy to use Discord.com raid tool
     <br/>
-    <br/>
-    <a href="https://github.com/Sympthey/DiscSpam"><strong>Explore the docs »</strong></a>
-    <br/>
-    <br/>
     <a href="https://github.com/Sympthey/DiscSpam/issues">Report Bug</a>
-    .
+    ,
     <a href="https://github.com/Sympthey/DiscSpam/issues">Request Feature</a>
   </p>
 </p>
