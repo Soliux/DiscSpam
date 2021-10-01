@@ -59,7 +59,7 @@ Once you have downloaded the correct version of the program just add all your di
 ```
 
 6. Run Program
-`Simply run the executable file if you're on windows or run the binary files of you're on Linux`
+`Simply run the executable file if you're on windows or run the binary files if you're on Linux`
 
 ### Creating A Pull Request
 
