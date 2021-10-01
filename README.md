@@ -26,7 +26,7 @@ Some unique features:
 
 ## Built With
 
-This tool has been created in [Go](https://golang.org/). For the speed and concurrency it is also using thread safe go routines these can be spawned, used and destroyed very fast whilst also being really friend on the computer resources.
+This tool has been created in [Go](https://golang.org/). For the speed and concurrency it is also using thread safe go routines these can be spawned, used and destroyed very fast whilst also being lightweight to run.
 
 ## Getting Started
 

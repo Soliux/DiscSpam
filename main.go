@@ -9,6 +9,7 @@ import (
 	"log"
 	"os"
 	"os/user"
+	"runtime"
 	"strings"
 	"sync"
 	"time"
@@ -100,6 +101,7 @@ func spawner(Tool string) {
 }
 
 func Input(DisplayText string) string {
+	var rtnInput string
 	user, err := user.Current()
 	if err != nil {
 		log.Fatal(err)
@@ -111,7 +113,12 @@ func Input(DisplayText string) string {
 		fmt.Printf("%s > ", DisplayText)
 	}
 	text, _ := reader.ReadString('\n')
-	return strings.Replace(text, "\r\n", "", -1)
+	if runtime.GOOS == "windows" {
+		rtnInput = strings.Replace(text, "\r\n", "", -1)
+	} else {
+		rtnInput = strings.Replace(text, "\n", "", -1)
+	}
+	return rtnInput
 }
 
 func Help() {
