@@ -82,8 +82,6 @@ These are just some things I am going to be adding to the tool very soon. If you
 
 
 
-
 ## License
 
-Distributed under the MIT License. See [LICENSE](https://github.com/Sympthey/DiscSpam/blob/main/LICENSE.md) for more information.
-
+Distributed under the MIT License. See [LICENSE](https://github.com/Sympthey/DiscSpam/blob/main/LICENSE) for more information.
