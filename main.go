@@ -111,7 +111,7 @@ func Input(DisplayText string) string {
 		fmt.Printf("%s > ", DisplayText)
 	}
 	text, _ := reader.ReadString('\n')
-	return strings.Replace(text, "\n", "", -1)
+	return strings.Replace(text, "\r\n", "", -1)
 }
 
 func Help() {
