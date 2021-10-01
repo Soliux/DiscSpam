@@ -74,7 +74,7 @@ func spawner(Tool string) {
 		wg.Wait()
 	case "4", "4.", "reaction message", "add reaction":
 		ChannelID := Input("Enter Channel ID")
-		MessageID := Input("Etner Message ID")
+		MessageID := Input("Enter Message ID")
 		Emoji := Input("Enter Emoji")
 		for _, tkn := range Tokens {
 			wg.Add(1)
@@ -86,7 +86,7 @@ func spawner(Tool string) {
 		wg.Wait()
 	case "5", "5.", "react message", "message reaction":
 		ChannelID := Input("Enter Channel ID")
-		MessageID := Input("Etner Message ID")
+		MessageID := Input("Enter Message ID")
 		Word := Input("Enter Word")
 		for _, tkn := range Tokens {
 			wg.Add(1)
