@@ -1,7 +1,5 @@
 package main
 
-// Token we are using for testing: ODg5NTUzMTY2MTU5NDUwMTY0.YUi7nA.6yXPQf3fWb-qFj6pncNP97Ie_pk
-// Invite to server for testing: https://discord.gg/7XZNPEcHza
 import (
 	"Raid-Client/interact"
 	"Raid-Client/server"
