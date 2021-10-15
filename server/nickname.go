@@ -6,7 +6,6 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"net/http"
 	"time"
 )
@@ -26,7 +25,7 @@ func ChangeNickname(ServerID string, Token string, Nickname string) error {
 
 	cf := cloudflare.Cookie()
 	xprop := utils.XSuperProperties()
-	
+
 	request.Header = http.Header{
 		"Accept":             []string{"*/*"},
 		"Accept-language":    []string{"en-GB"},
@@ -53,16 +52,6 @@ func ChangeNickname(ServerID string, Token string, Nickname string) error {
 		return err
 	}
 	defer res.Body.Close()
-
-	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
-		return err
-	}
-
-	var responseJson map[string]interface{}
-	if err := json.Unmarshal(body, &responseJson); err != nil {
-		return err
-	}
 
 	switch res.StatusCode {
 	case 200:
