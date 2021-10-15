@@ -97,6 +97,17 @@ func spawner(Tool string) {
 			}(tkn, Word, MessageID, ChannelID)
 		}
 		wg.Wait()
+	case "6", "6.", "change nickname", "nick":
+		ServerID := Input("Enter Server ID")
+		Nickname := Input("Enter Nickname")
+		for _, tkn := range Tokens {
+			wg.Add(1)
+			go func(TOKEN string, Server string, Nick string) {
+				server.ChangeNickname(ServerID, TOKEN, Nickname)
+				wg.Done()
+			}(tkn, ServerID, Nickname)
+		}
+		wg.Wait()
 	}
 }
 
@@ -127,6 +138,7 @@ func Help() {
 	fmt.Printf("%s %s\n", white("3. Spam Message - Params:"), red("<Server ID> <Channel ID> <Message To Spam>"))
 	fmt.Printf("%s %s\n", white("4. Add Reaction - Params:"), red("<Channel ID> <Message ID> <Emoji>"))
 	fmt.Printf("%s %s\n", white("5. Add Reaction Message - Params:"), red("<Channel ID> <Message ID> <Reaction Message>"))
+	fmt.Printf("%s %s\n", white("6. Change Nickname - Params:"), red("<Server ID> <Nickname>"))
 }
 
 func init() {
