@@ -3,6 +3,7 @@ package interact
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/utils"
+	"errors"
 	"fmt"
 	"net/http"
 	"strings"
@@ -11,47 +12,55 @@ import (
 	"github.com/kyokomi/emoji/v2"
 )
 
+var cmt int
+
 func AddReaction(ChannelID string, MessageID string, Token string, Emoji string) error {
-	Emoji = strings.TrimSuffix(emoji.Sprint(Emoji), " ")
-	request, err := http.NewRequest("PUT", fmt.Sprintf("https://discord.com/api/v9/channels/%s/messages/%s/reactions/%s/%s", ChannelID, MessageID, Emoji, "%40me"), nil)
-	if err != nil {
-		return err
-	}
-	cf := cloudflare.Cookie()
-	xprop := utils.XSuperProperties()
-	request.Header = http.Header{
-		"Accept":             []string{"*/*"},
-		"Accept-language":    []string{"en-GB"},
-		"Authorization":      []string{Token},
-		"Content-length":     []string{"2"},
-		"Content-type":       []string{"application/json"},
-		"Cookie":             []string{cf},
-		"Origin":             []string{"https://discord.com"},
-		"Sec-fetch-dest":     []string{"empty"},
-		"Sec-fetch-mode":     []string{"cors"},
-		"Sec-fetch-site":     []string{"same-origin"},
-		"User-agent":         []string{"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.15 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36"},
-		"X-debug-options":    []string{"bugReporterEnabled"},
-		"X-super-properties": []string{xprop},
-	}
+	if cmt >= 2 {
+		return errors.New("error working")
+	} else {
+		Emoji = strings.TrimSuffix(emoji.Sprint(Emoji), " ")
+		request, err := http.NewRequest("PUT", fmt.Sprintf("https://discord.com/api/v9/channels/%s/messages/%s/reactions/%s/%s", ChannelID, MessageID, Emoji, "%40me"), nil)
+		if err != nil {
+			return err
+		}
+		cf := cloudflare.Cookie()
+		xprop := utils.XSuperProperties()
+		request.Header = http.Header{
+			"Accept":             []string{"*/*"},
+			"Accept-language":    []string{"en-GB"},
+			"Authorization":      []string{Token},
+			"Content-length":     []string{"2"},
+			"Content-type":       []string{"application/json"},
+			"Cookie":             []string{cf},
+			"Origin":             []string{"https://discord.com"},
+			"Sec-fetch-dest":     []string{"empty"},
+			"Sec-fetch-mode":     []string{"cors"},
+			"Sec-fetch-site":     []string{"same-origin"},
+			"User-agent":         []string{"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.15 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36"},
+			"X-debug-options":    []string{"bugReporterEnabled"},
+			"X-super-properties": []string{xprop},
+		}
 
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
+		client := &http.Client{
+			Timeout: 5 * time.Second,
+		}
 
-	res, err := client.Do(request)
-	if err != nil {
-		return err
-	}
+		res, err := client.Do(request)
+		if err != nil {
+			return err
+		}
 
-	switch res.StatusCode {
-	case 204:
-		fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Added reaction %s to %s", Emoji, MessageID)))
-	default:
-		fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to add reaction %s to %s", Emoji, MessageID)))
-	}
+		switch res.StatusCode {
+		case 204:
+			fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Added reaction %s to %s", Emoji, MessageID)))
+			cmt--
+		default:
+			fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to add reaction %s to %s", Emoji, MessageID)))
+			cmt++
+		}
 
-	return nil
+		return nil
+	}
 }
 
 func ReactionMessage(ChannelID string, MessageID string, Token string, Word string) error {
