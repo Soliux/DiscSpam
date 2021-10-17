@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"strings"
 	"time"
+
+	"github.com/kyokomi/emoji/v2"
 )
 
 var cmt int
@@ -16,6 +18,7 @@ func AddReaction(ChannelID string, MessageID string, Token string, Emoji string)
 	if cmt >= 2 {
 		return errors.New("error working")
 	} else {
+		Emoji = strings.TrimSuffix(emoji.Sprint(Emoji), " ")
 		request, err := http.NewRequest("PUT", fmt.Sprintf("https://discord.com/api/v9/channels/%s/messages/%s/reactions/%s/%s", ChannelID, MessageID, Emoji, "%40me"), nil)
 		if err != nil {
 			return err
