@@ -56,8 +56,6 @@ func AddFriend(Token string, User string) error {
 	defer res.Body.Close()
 
 	switch res.StatusCode {
-	case 400, 403:
-		fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to send friend request to %s", User)))
 	case 204:
 		fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Sent friend request to %s", User)))
 	default:
@@ -103,8 +101,6 @@ func RemoveFriend(Token string, UserID string) error {
 	defer res.Body.Close()
 
 	switch res.StatusCode {
-	case 400, 403:
-		fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to unfriend user id: %s", UserID)))
 	case 204:
 		fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Unfriended user id: %s", UserID)))
 	default:
