@@ -47,8 +47,6 @@ func LeaveServer(serverID string, token string) error {
 	switch res.StatusCode {
 	case 204:
 		fmt.Printf("%s %s %s\n", white(token), green("| Successfully Left"), white(serverID))
-	case 404:
-		fmt.Printf("%s %s %s\n", white(token), red("| Cannot Leave"), white(serverID))
 	default:
 		fmt.Printf("%s %s %s\n", white(token), red("| Cannot Leave"), white(serverID))
 	}
