@@ -78,10 +78,6 @@ func JoinServer(inviteCode string, token string) error {
 		ServerName := ParseServerID["name"].(string)
 		C.Set("JoinServerID", ServerID, cache.NoExpiration)
 		fmt.Printf("%s %s %s\n", white(token), green("| Successfully Joined"), white(ServerName))
-	case 404:
-		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
-	case 401:
-		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
 	default:
 		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
 	}

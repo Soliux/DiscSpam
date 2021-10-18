@@ -40,22 +40,22 @@ Once you have downloaded the correct version of the program just add all your di
 
 2. Clone the repo
 ```sh
-   git clone https://github.com/Sympthey/DiscSpam.git
+git clone https://github.com/Sympthey/DiscSpam.git
 ```
 
 3. Install Go Modules
 ```sh
-   go install
+go install
 ```
 
 4. Compile Code
 ```sh
-   go build
+go build .
 ```
 
 5. Add Tokens
 ```sh
-   Add the Discord tokens to tokens.txt
+Add the Discord tokens to tokens.txt
 ```
 
 6. Run Program
@@ -70,17 +70,21 @@ Once you have downloaded the correct version of the program just add all your di
 5. Open a Pull Request
 
 ### Roadmap
-1. Add Proxy Support
-2. Add Friend Request Support
-3. Voice Chat Spammer
-4. Token Checking Built In
-5. Create And Train Captcha Solver
-6. Support Fake Typing
+- [] Proxy Support
+- [x] Add/Remove Friends
+- [] Voice Chat Support
+- [] Add Nickname Changing
+- [x] Add Ability To Change Status
+- [x] Add Ability To Heartbeat Token
+- [x] Add Support For Colon Emojis `:joy:`
+- [] Token Checker
+- [] Create, Train, Manage Captcha Solving AI
+- [] Allow Fake Typing
+- [] Anti-Kick, Auto Join Back If Kicked
+
 
 These are just some things I am going to be adding to the tool very soon. If you have any ideas feel free to open a [issue](https://github.com/Sympthey/DiscSpam/issues) request and let me know.
     
-
-
 
 ## License
 
