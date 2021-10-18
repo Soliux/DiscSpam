@@ -189,6 +189,8 @@ func Help() {
 	fmt.Printf("%s %s\n", white("5. Add Reaction Message - Params:"), red("<Channel ID> <Message ID> <Reaction Message>"))
 	fmt.Printf("%s %s\n", white("6. Change Nickname - Params:"), red("<Server ID> <Nickname>"))
 	fmt.Printf("%s %s\n", white("7. Change Status - Params:"), red("<Content> <Status> <Type>"))
+	fmt.Printf("%s %s\n", white("8. Add Friend - Params:"), red("<Username> i.e Wumpus#0000"))
+	fmt.Printf("%s %s\n", white("9. Remove Friend - Params:"), red("<User ID>"))
 }
 
 func init() {
