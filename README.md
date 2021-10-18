@@ -71,7 +71,7 @@ Once you have downloaded the correct version of the program just add all your di
 
 ### Roadmap
 1. Add Proxy Support
-2. Add Friend Request Support
+2. ~~Add Friend Request Support~~
 3. Voice Chat Spammer
 4. Token Checking Built In
 5. Create And Train Captcha Solver
