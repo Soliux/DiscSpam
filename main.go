@@ -108,23 +108,6 @@ func spawner(Tool string) {
 			}(tkn, ServerID, Nickname)
 		}
 		wg.Wait()
-	case "7":
-		Type := 0
-		Content := Input("Enter Status Content (e.g. hello world)")
-		utils.Status = Input("Enter Status (e.g. online, idle, dnd)")
-		Activity := strings.ToLower(Input("Enter Type (e.g. playing, watching, listening)"))
-
-		switch Activity {
-		case "playing":
-			Type = utils.ActivityGame
-		case "watching":
-			Type = utils.ActivityWatching
-		case "listening":
-			Type = utils.ActivityListening
-		}
-
-		utils.Presence = []utils.Activity{{Name: Content, Type: utils.ActivityType(Type)}}
-		go interact.ChangeStatus(Tokens)
 	}
 }
 
@@ -156,7 +139,6 @@ func Help() {
 	fmt.Printf("%s %s\n", white("4. Add Reaction - Params:"), red("<Channel ID> <Message ID> <Emoji>"))
 	fmt.Printf("%s %s\n", white("5. Add Reaction Message - Params:"), red("<Channel ID> <Message ID> <Reaction Message>"))
 	fmt.Printf("%s %s\n", white("6. Change Nickname - Params:"), red("<Server ID> <Nickname>"))
-	fmt.Printf("%s %s\n", white("7. Change Status - Params:"), red("<Content> <Status> <Type>"))
 }
 
 func init() {
