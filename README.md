@@ -70,17 +70,17 @@ Add the Discord tokens to tokens.txt
 5. Open a Pull Request
 
 ### Roadmap
-- [] Proxy Support
+- Proxy Support
 - [x] Add/Remove Friends
-- [] Voice Chat Support
-- [] Add Nickname Changing
+- Voice Chat Support
+- [x] Add Nickname Changing
 - [x] Add Ability To Change Status
 - [x] Add Ability To Heartbeat Token
 - [x] Add Support For Colon Emojis `:joy:`
-- [] Token Checker
-- [] Create, Train, Manage Captcha Solving AI
-- [] Allow Fake Typing
-- [] Anti-Kick, Auto Join Back If Kicked
+- Token Checker
+- Create, Train, Manage Captcha Solving AI
+- Allow Fake Typing
+- Anti-Kick, Auto Join Back If Kicked
 
 
 These are just some things I am going to be adding to the tool very soon. If you have any ideas feel free to open a [issue](https://github.com/Sympthey/DiscSpam/issues) request and let me know.
