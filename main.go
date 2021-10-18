@@ -29,18 +29,18 @@ func main() {
 		text := Input("")
 		spawner(text)
 	}
-
 }
 
 func spawner(Tool string) {
 	switch Tool {
 	case "exit", ".exit", "EXIT", "close":
 		os.Exit(0)
-	case "help", "h", "HELP ME", "menu", "home", "HELP", ".":
+	case "help", "h", "HELP ME", "menu", "home", "HELP", ".", "ls", "LS":
+		utils.ClearScreen()
 		Help()
 	case "cls", "clear", "CLS", "CLEAR", "Clear", "Cls":
 		utils.ClearScreen()
-	// There most likely is a more elegant way of doing this but I am just going to do this because it is simple and easy to do
+		Help()
 	case "1", "1.", "join", "join server", "JOIN", "JOIN SERVER":
 		invite := Input("Enter Server Invite")
 		for _, tkn := range Tokens {
@@ -110,6 +110,7 @@ func spawner(Tool string) {
 		wg.Wait()
 	case "7":
 		Type := 0
+		fmt.Println("[NOTE] The status will only remain active for 2 minutes")
 		Content := Input("Enter Status Content (e.g. hello world)")
 		utils.Status = Input("Enter Status (e.g. online, idle, dnd)")
 		Activity := strings.ToLower(Input("Enter Type (e.g. playing, watching, listening)"))
@@ -124,7 +125,15 @@ func spawner(Tool string) {
 		}
 
 		utils.Presence = []utils.Activity{{Name: Content, Type: utils.ActivityType(Type)}}
-		go interact.ChangeStatus(Tokens)
+
+		for _, tkn := range Tokens {
+			wg.Add(1)
+			go func(TOKEN string) {
+				interact.ChangeStatus(TOKEN)
+				wg.Done()
+			}(tkn)
+		}
+		wg.Wait()
 	}
 }
 
@@ -135,6 +144,9 @@ func Input(DisplayText string) string {
 		log.Fatal(err)
 	}
 	reader := bufio.NewReader(os.Stdin)
+	if user.Name == "" {
+		user.Name = "Raider"
+	}
 	if DisplayText == "" {
 		fmt.Printf("%s@DiscSpam > ", user.Name)
 	} else {

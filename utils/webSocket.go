@@ -79,7 +79,7 @@ func setupHeartbeat(interval float64, ws *websocket.Conn) error {
 		if marshalErr != nil {
 			return marshalErr
 		}
-		
+
 		//log.Println("sending payload (heartbeat): ", string(b))
 		err := ws.WriteMessage(websocket.TextMessage, b)
 		if err != nil {

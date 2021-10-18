@@ -2,42 +2,26 @@ package interact
 
 import (
 	"Raid-Client/utils"
+	"fmt"
 	"time"
 )
 
 var tokens []string
 var updating bool
 
-/*
-Instead of having multiple websocket connections,
-we setup one and send our presence message and close
-the connection. Our status stays for around 2 mins, meaning
-we can keep connecting and sending a message every 100 secs
-*/
-
-// Instantly update status instead of waiting for loop
-func ChangeStatus(Tokens []string) {
-	tokens = Tokens
-
-	if !updating { 
-		for _, tkn := range tokens {
-			time.Sleep(100 * time.Millisecond)
-			ws := utils.SetupWebSocket(tkn)
-			go utils.RecieveIncomingPayloads(ws, tkn)
-
-			for {
-				if utils.WSConnected {
-					utils.SetStatus(utils.Status, ws)
-					ws.Close()
-					break
-				}
+func ChangeStatus(token string) {
+	if !updating {
+		time.Sleep(100 * time.Millisecond)
+		ws := utils.SetupWebSocket(token)
+		go utils.RecieveIncomingPayloads(ws, token)
+		for {
+			if utils.WSConnected {
+				utils.SetStatus(utils.Status, ws)
+				fmt.Printf("%s %s\n", white(token), green("| Successfully set the status"))
+				ws.Close()
+				break
 			}
 		}
-	}
-
-	if !utils.Looping {
-		utils.Looping = true
-		go loopMessage()
 	}
 }
 
