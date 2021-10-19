@@ -160,8 +160,10 @@ func spawner(Tool string) {
 	case "10", "10.", "check", "check token", "token check":
 		wg.Add(1)
 		go func() {
-			utils.CheckTokens(Tokens)
-			wg.Done()
+			defer wg.Done()
+			Tokens = nil
+			t := utils.CheckTokens(Tokens)
+			Tokens = t
 		}()
 		wg.Wait()
 	}
