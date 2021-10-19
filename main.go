@@ -18,10 +18,12 @@ import (
 	"github.com/patrickmn/go-cache"
 )
 
-var white = color.FgWhite.Render
-var red = color.FgRed.Render
-var Tokens []string
-var wg sync.WaitGroup
+var (
+	white  = color.FgWhite.Render
+	red    = color.FgRed.Render
+	Tokens []string
+	wg     sync.WaitGroup
+)
 
 func main() {
 	Help()
@@ -154,6 +156,14 @@ func spawner(Tool string) {
 			}(tkn, UserID)
 		}
 		wg.Wait()
+
+	case "10", "10.", "check", "check token", "token check":
+		wg.Add(1)
+		go func() {
+			utils.CheckTokens(Tokens)
+			wg.Done()
+		}()
+		wg.Wait()
 	}
 }
 
@@ -191,6 +201,7 @@ func Help() {
 	fmt.Printf("%s %s\n", white("7. Change Status - Params:"), red("<Content> <Status> <Type>"))
 	fmt.Printf("%s %s\n", white("8. Add Friend - Params:"), red("<Username> i.e Wumpus#0000"))
 	fmt.Printf("%s %s\n", white("9. Remove Friend - Params:"), red("<User ID>"))
+	fmt.Printf("%s\n", white("10. Check Tokens "))
 }
 
 func init() {
