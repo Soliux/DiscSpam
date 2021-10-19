@@ -6,20 +6,22 @@ import (
 	"time"
 )
 
-var tokens []string
+var TOKENS []string
 var updating bool
 
-func ChangeStatus(token string) {
+func ChangeStatus() {
 	if !updating {
 		time.Sleep(100 * time.Millisecond)
-		ws := utils.SetupWebSocket(token)
-		go utils.RecieveIncomingPayloads(ws, token)
-		for {
-			if utils.WSConnected {
-				utils.SetStatus(utils.Status, ws)
-				fmt.Printf("%s %s\n", white(token), green("| Successfully set the status"))
-				ws.Close()
-				break
+		for _, token := range TOKENS {
+			ws := utils.SetupWebSocket(token)
+			go utils.RecieveIncomingPayloads(ws, token)
+			for {
+				if utils.WSConnected {
+					utils.SetStatus(utils.Status, ws)
+					fmt.Printf("%s %s\n", white(token), green("| Successfully set the status"))
+					ws.Close()
+					break
+				}
 			}
 		}
 	}
@@ -30,7 +32,7 @@ func loopMessage() {
 	for {
 		time.Sleep(100 * time.Second)
 		updating = true
-		for _, tkn := range tokens {
+		for _, tkn := range TOKENS {
 			time.Sleep(100 * time.Millisecond)
 			ws := utils.SetupWebSocket(tkn)
 			go utils.RecieveIncomingPayloads(ws, tkn)

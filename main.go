@@ -126,14 +126,14 @@ func spawner(Tool string) {
 
 		utils.Presence = []utils.Activity{{Name: Content, Type: utils.ActivityType(Type)}}
 
-		for _, tkn := range Tokens {
-			wg.Add(1)
-			go func(TOKEN string) {
-				interact.ChangeStatus(TOKEN)
-				wg.Done()
-			}(tkn)
-		}
+		wg.Add(1)
+		go func() {
+			interact.TOKENS = Tokens
+			interact.ChangeStatus()
+			wg.Done()
+		}()
 		wg.Wait()
+
 	case "8", "8.", "friend", "add friends":
 		Username := Input("Enter Username")
 		for _, tkn := range Tokens {
