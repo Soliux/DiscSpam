@@ -161,8 +161,8 @@ func spawner(Tool string) {
 		wg.Add(1)
 		go func() {
 			defer wg.Done()
-			Tokens = nil
 			t := utils.CheckTokens(Tokens)
+			Tokens = nil
 			Tokens = t
 		}()
 		wg.Wait()

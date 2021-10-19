@@ -23,7 +23,10 @@ var (
 )
 
 func CheckTokens(tokens []string) []string {
-	fmt.Println("Checking:", len(tokens))
+	good = 0
+	bad = 0
+	locked = 0
+	fmt.Printf("Checking %d tokens\n", len(tokens))
 	for _, t := range tokens {
 		wg.Add(1)
 		go func(t string) {
@@ -65,6 +68,6 @@ func CheckTokens(tokens []string) []string {
 		}(t)
 	}
 	wg.Wait()
-	fmt.Println("Finished Checking\nGood: tokens", good, "\nBad tokens:", bad, "\nLocked tokens:", locked)
+	fmt.Printf("%s\n%s%s\n%s%s\n%s%s\n", green("Finished Checking: "), green("Good tokens: "), green(good), red("Bad tokens: "), red(bad), red("Locked tokens: "), red(locked))
 	return goodTokens
 }
