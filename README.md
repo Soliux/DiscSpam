@@ -77,7 +77,7 @@ Add the Discord tokens to tokens.txt
 - [x] Add Ability To Change Status
 - [x] Add Ability To Heartbeat Token
 - [x] Add Support For Colon Emojis `:joy:`
-- Token Checker
+- [x] Token Checker
 - Create, Train, Manage Captcha Solving AI
 - Allow Fake Typing
 - Anti-Kick, Auto Join Back If Kicked
