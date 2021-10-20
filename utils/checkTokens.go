@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"Raid-Client/cloudflare"
 	"fmt"
 	"net/http"
 	"sync"
@@ -37,9 +38,22 @@ func CheckTokens(tokens []string) []string {
 			if err != nil {
 				fmt.Println(err)
 			}
+			cf := cloudflare.Cookie()
+			xprop := XSuperProperties()
 			request.Header = http.Header{
-				"Authorization": []string{t},
-				"Content-type":  []string{"application/json"},
+				"Accept":             []string{"*/*"},
+				"Accept-language":    []string{"en-GB"},
+				"Authorization":      []string{t},
+				"Content-length":     []string{"2"},
+				"Content-type":       []string{"application/json"},
+				"Cookie":             []string{cf},
+				"Origin":             []string{"https://discord.com"},
+				"Sec-fetch-dest":     []string{"empty"},
+				"Sec-fetch-mode":     []string{"cors"},
+				"Sec-fetch-site":     []string{"same-origin"},
+				"User-agent":         []string{"Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) discord/0.0.15 Chrome/83.0.4103.122 Electron/9.3.5 Safari/537.36"},
+				"X-debug-options":    []string{"bugReporterEnabled"},
+				"X-super-properties": []string{xprop},
 			}
 			client := &http.Client{
 				Timeout: 5 * time.Second,
