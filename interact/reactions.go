@@ -2,6 +2,7 @@ package interact
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"Raid-Client/utils"
 	"errors"
 	"fmt"
@@ -52,10 +53,12 @@ func AddReaction(ChannelID string, MessageID string, Token string, Emoji string)
 
 		switch res.StatusCode {
 		case 204:
-			fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Added reaction %s to %s", Emoji, MessageID)))
+			utils.Logger(fmt.Sprintf("%s has successfully added the reaction %s to the message %s", Token, Emoji, MessageID))
+			fmt.Printf("%s %s %s\n", constants.Red(Token), constants.Green("Success:"), constants.White(fmt.Sprintf("Added reaction %s to %s", Emoji, MessageID)))
 			cmt--
 		default:
-			fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to add reaction %s to %s", Emoji, MessageID)))
+			utils.Logger(fmt.Sprintf("%s was unable to add the reaction %s to %s", Token, Emoji, MessageID))
+			fmt.Printf("%s %s\n", constants.White(Token), constants.Red(fmt.Sprintf("Error: Unable to add reaction %s to %s", Emoji, MessageID)))
 			cmt++
 		}
 

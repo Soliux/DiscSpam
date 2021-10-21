@@ -1,6 +1,7 @@
 package main
 
 import (
+	"Raid-Client/constants"
 	"Raid-Client/interact"
 	"Raid-Client/server"
 	"Raid-Client/utils"
@@ -11,18 +12,9 @@ import (
 	"os/user"
 	"runtime"
 	"strings"
-	"sync"
 	"time"
 
-	"github.com/gookit/color"
 	"github.com/patrickmn/go-cache"
-)
-
-var (
-	white  = color.FgWhite.Render
-	red    = color.FgRed.Render
-	Tokens []string
-	wg     sync.WaitGroup
 )
 
 func main() {
@@ -36,80 +28,88 @@ func main() {
 func spawner(Tool string) {
 	switch Tool {
 	case "exit", ".exit", "EXIT", "close":
+		utils.Logger("Exiting...")
 		os.Exit(0)
 	case "help", "h", "HELP ME", "menu", "home", "HELP", ".", "ls", "LS":
 		utils.ClearScreen()
 		Help()
+		utils.Logger("Printing help menu")
 	case "cls", "clear", "CLS", "CLEAR", "Clear", "Cls":
 		utils.ClearScreen()
-		Help()
+		utils.Logger("Clearing screen")
 	case "1", "1.", "join", "join server", "JOIN", "JOIN SERVER":
 		invite := Input("Enter Server Invite")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Join server module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, Server string) {
 				server.JoinServer(Server, TOKEN)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, invite)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "2", "2.", "leave", "Leave Server", "leave server", "Leave":
 		ServerID := Input("Enter Server ID")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Leave server module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, Server string) {
 				server.LeaveServer(Server, TOKEN)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, ServerID)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "3", "3.", "spam message", "send messages", "message spammer", "spam":
 		ServerID := Input("Enter Server ID")
 		ChannelID := Input("Enter Channel ID")
 		MessageToSpam := Input("Enter Message To Spam")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Message spammer module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, Server string, Message string, Channel string) {
 				interact.SendMessage(Server, Channel, TOKEN, Message)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, ServerID, MessageToSpam, ChannelID)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "4", "4.", "reaction message", "add reaction":
 		ChannelID := Input("Enter Channel ID")
 		MessageID := Input("Enter Message ID")
 		Emoji := Input("Enter Emoji")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Add reaction module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, Emoji string, Message string, Channel string) {
 				interact.AddReaction(Channel, MessageID, TOKEN, Emoji)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, Emoji, MessageID, ChannelID)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "5", "5.", "react message", "message reaction":
 		ChannelID := Input("Enter Channel ID")
 		MessageID := Input("Enter Message ID")
 		Word := Input("Enter Word")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Message reaction module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, Word string, Message string, Channel string) {
 				interact.ReactionMessage(Channel, MessageID, TOKEN, Word)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, Word, MessageID, ChannelID)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "6", "6.", "change nickname", "nick":
 		ServerID := Input("Enter Server ID")
 		Nickname := Input("Enter Nickname")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Nickname changer module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, Server string, Nick string) {
 				server.ChangeNickname(ServerID, TOKEN, Nickname)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, ServerID, Nickname)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "7", "7.", "status", "change status":
 		Type := 0
 		fmt.Println("[NOTE] The status will only remain active for 2 minutes")
@@ -128,46 +128,52 @@ func spawner(Tool string) {
 
 		utils.Presence = []utils.Activity{{Name: Content, Type: utils.ActivityType(Type)}}
 
-		wg.Add(1)
+		constants.Wg.Add(1)
+		utils.Logger("Status change module starting...")
 		go func() {
-			interact.TOKENS = Tokens
+			interact.TOKENS = constants.Tokens
 			interact.ChangeStatus()
-			wg.Done()
+			constants.Wg.Done()
 		}()
-		wg.Wait()
+		constants.Wg.Wait()
 
 	case "8", "8.", "friend", "add friends":
 		Username := Input("Enter Username")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Add friend module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, User string) {
 				interact.AddFriend(TOKEN, Username)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, Username)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 	case "9", "9.", "unfriend", "remove friends":
 		UserID := Input("Enter User ID")
-		for _, tkn := range Tokens {
-			wg.Add(1)
+		utils.Logger("Unfriend module starting...")
+		for _, tkn := range constants.Tokens {
+			constants.Wg.Add(1)
 			go func(TOKEN string, User string) {
 				interact.RemoveFriend(TOKEN, UserID)
-				wg.Done()
+				constants.Wg.Done()
 			}(tkn, UserID)
 		}
-		wg.Wait()
+		constants.Wg.Wait()
 
 	case "10", "10.", "check", "check token", "token check":
-		wg.Add(1)
+		utils.Logger("Token Checker module starting...")
+		constants.Wg.Add(1)
 		go func() {
-			defer wg.Done()
-			t := utils.CheckTokens(Tokens)
-			utils.WriteLines(Tokens, "./old_tokens.txt")
-			Tokens = nil
-			Tokens = t
-			utils.WriteLines(Tokens, "./tokens.txt")
+			defer constants.Wg.Done()
+			t := utils.CheckTokens(constants.Tokens)
+			utils.Logger("Writing old tokens to old_tokens.txt")
+			utils.WriteLines(constants.Tokens, "./old_tokens.txt")
+			constants.Tokens = nil
+			constants.Tokens = t
+			utils.Logger("Writing working tokens to tokens.txt")
+			utils.WriteLines(constants.Tokens, "./tokens.txt")
 		}()
-		wg.Wait()
+		constants.Wg.Wait()
 	}
 }
 
@@ -196,25 +202,33 @@ func Input(DisplayText string) string {
 }
 
 func Help() {
-	fmt.Printf("%s %s\n", white("1. Join Server - Params:"), red("<Invite Code>"))
-	fmt.Printf("%s %s\n", white("2. Leave Server - Params:"), red("<Server ID>"))
-	fmt.Printf("%s %s\n", white("3. Spam Message - Params:"), red("<Server ID> <Channel ID> <Message To Spam>"))
-	fmt.Printf("%s %s\n", white("4. Add Reaction - Params:"), red("<Channel ID> <Message ID> <Emoji>"))
-	fmt.Printf("%s %s\n", white("5. Add Reaction Message - Params:"), red("<Channel ID> <Message ID> <Reaction Message>"))
-	fmt.Printf("%s %s\n", white("6. Change Nickname - Params:"), red("<Server ID> <Nickname>"))
-	fmt.Printf("%s %s\n", white("7. Change Status - Params:"), red("<Content> <Status> <Type>"))
-	fmt.Printf("%s %s\n", white("8. Add Friend - Params:"), red("<Username> i.e Wumpus#0000"))
-	fmt.Printf("%s %s\n", white("9. Remove Friend - Params:"), red("<User ID>"))
-	fmt.Printf("%s %s\n", white("10. Check Tokens - Params"), red("<None>"))
+	fmt.Printf("%s %s\n", constants.White("1. Join Server - Params:"), constants.Red("<Invite Code>"))
+	fmt.Printf("%s %s\n", constants.White("2. Leave Server - Params:"), constants.Red("<Server ID>"))
+	fmt.Printf("%s %s\n", constants.White("3. Spam Message - Params:"), constants.Red("<Server ID> <Channel ID> <Message To Spam>"))
+	fmt.Printf("%s %s\n", constants.White("4. Add Reaction - Params:"), constants.Red("<Channel ID> <Message ID> <Emoji>"))
+	fmt.Printf("%s %s\n", constants.White("5. Add Reaction Message - Params:"), constants.Red("<Channel ID> <Message ID> <Reaction Message>"))
+	fmt.Printf("%s %s\n", constants.White("6. Change Nickname - Params:"), constants.Red("<Server ID> <Nickname>"))
+	fmt.Printf("%s %s\n", constants.White("7. Change Status - Params:"), constants.Red("<Content> <Status> <Type>"))
+	fmt.Printf("%s %s\n", constants.White("8. Add Friend - Params:"), constants.Red("<Username> i.e Wumpus#0000"))
+	fmt.Printf("%s %s\n", constants.White("9. Remove Friend - Params:"), constants.Red("<User ID>"))
+	fmt.Printf("%s %s\n", constants.White("10. Check Tokens - Params"), constants.Red("<None>"))
 }
 
 func init() {
+	l, p := utils.Get_commandline_values()
+	constants.Logging = *l
+	constants.Proxy = *p
+
+	// Call our logger function and set the file output if needed
+	utils.SetupLogger()
+
 	server.C = cache.New(60*time.Minute, 120*time.Minute)
 	tmp, err := utils.ReadTokens("./tokens.txt")
 	if err != nil {
-		fmt.Printf("%s\n", red("Error reading tokens in tokens.txt"))
+		utils.Logger("Error reading discord tokens from tokens.txt")
+		fmt.Printf("%s\n", constants.Red("Error reading discord tokens from tokens.txt"))
 		time.Sleep(1 * time.Second)
 		os.Exit(0)
 	}
-	Tokens = tmp
+	constants.Tokens = tmp
 }

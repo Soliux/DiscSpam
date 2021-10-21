@@ -2,7 +2,9 @@ package interact
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"Raid-Client/utils"
+
 	"bytes"
 	"encoding/json"
 	"fmt"
@@ -57,9 +59,11 @@ func AddFriend(Token string, User string) error {
 
 	switch res.StatusCode {
 	case 204:
-		fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Sent friend request to %s", User)))
+		utils.Logger(fmt.Sprintf("%s has successfully added %s", Token, User))
+		fmt.Printf("%s %s %s\n", constants.Red(Token), constants.Green("Success:"), constants.White(fmt.Sprintf("Sent friend request to %s", User)))
 	default:
-		fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to send friend request to %s", User)))
+		utils.Logger(fmt.Sprintf("%s was unable to add %s", Token, User))
+		fmt.Printf("%s %s\n", constants.White(Token), constants.Red(fmt.Sprintf("Error: Unable to send friend request to %s", User)))
 	}
 
 	return nil
@@ -102,9 +106,11 @@ func RemoveFriend(Token string, UserID string) error {
 
 	switch res.StatusCode {
 	case 204:
-		fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Unfriended user id: %s", UserID)))
+		utils.Logger(fmt.Sprintf("%s has removed %s", Token, UserID))
+		fmt.Printf("%s %s %s\n", constants.Red(Token), constants.Green("Success:"), constants.White(fmt.Sprintf("Unfriended user id: %s", UserID)))
 	default:
-		fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to unfriend user id: %s", UserID)))
+		utils.Logger(fmt.Sprintf("%s was unable to remove %s", Token, UserID))
+		fmt.Printf("%s %s\n", constants.White(Token), constants.Red(fmt.Sprintf("Error: Unable to unfriend user id: %s", UserID)))
 	}
 
 	return nil

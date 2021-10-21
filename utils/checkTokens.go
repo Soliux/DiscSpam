@@ -2,12 +2,11 @@ package utils
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"fmt"
 	"net/http"
 	"sync"
 	"time"
-
-	"github.com/gookit/color"
 )
 
 var (
@@ -17,10 +16,6 @@ var (
 	good       int
 	bad        int
 	locked     int
-
-	green = color.FgGreen.Render
-	white = color.FgWhite.Render
-	red   = color.FgRed.Render
 )
 
 func CheckTokens(tokens []string) []string {
@@ -67,21 +62,25 @@ func CheckTokens(tokens []string) []string {
 			switch res.StatusCode {
 			case 200:
 				good++
-				fmt.Printf("%s %s \n", white(t), green("| is Valid"))
+				Logger(fmt.Sprintf("%s is valid", t))
+				fmt.Printf("%s %s \n", constants.White(t), constants.Green("| is Valid"))
 				goodTokens = append(goodTokens, t)
 			case 401:
 				bad++
-				fmt.Printf("%s %s \n", white(t), red("| is Invalid"))
+				Logger(fmt.Sprintf("%s is invalid", t))
+				fmt.Printf("%s %s \n", constants.White(t), constants.Red("| is Invalid"))
 			case 403:
 				locked++
-				fmt.Printf("%s %s \n", white(t), red("| is Phone locked"))
+				Logger(fmt.Sprintf("%s is phone locked", t))
+				fmt.Printf("%s %s \n", constants.White(t), constants.Red("| is Phone locked"))
 			default:
 				bad++
-				fmt.Printf("%s %s \n", white(t), red("| is Invalid"))
+				Logger(fmt.Sprintf("%s is invalid", t))
+				fmt.Printf("%s %s \n", constants.White(t), constants.Red("| is Invalid"))
 			}
 		}(t)
 	}
 	wg.Wait()
-	fmt.Printf("%s\n%s%s\n%s%s\n%s%s\n", green("Finished Checking: "), green("Good tokens: "), green(good), red("Bad tokens: "), red(bad), red("Locked tokens: "), red(locked))
+	fmt.Printf("%s\n%s%s\n%s%s\n%s%s\n", constants.Green("Finished Checking: "), constants.Green("Good tokens: "), constants.Green(good), constants.Red("Bad tokens: "), constants.Red(bad), constants.Red("Locked tokens: "), constants.Red(locked))
 	return goodTokens
 }
