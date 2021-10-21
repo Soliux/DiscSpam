@@ -2,6 +2,7 @@ package server
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
@@ -11,14 +12,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gookit/color"
 	"github.com/patrickmn/go-cache"
 )
 
 var C *cache.Cache
-var green = color.FgGreen.Render
-var white = color.FgWhite.Render
-var red = color.FgRed.Render
 
 func JoinServer(inviteCode string, token string) error {
 	code := ""
@@ -77,9 +74,11 @@ func JoinServer(inviteCode string, token string) error {
 		ServerID := ParseServerID["id"].(string)
 		ServerName := ParseServerID["name"].(string)
 		C.Set("JoinServerID", ServerID, cache.NoExpiration)
-		fmt.Printf("%s %s %s\n", white(token), green("| Successfully Joined"), white(ServerName))
+		utils.Logger(fmt.Sprintf("%s has successfully joined %s", token, ServerName))
+		fmt.Printf("%s %s %s\n", constants.White(token), constants.Green("| Successfully Joined"), constants.White(ServerName))
 	default:
-		fmt.Printf("%s %s %s\n", white(token), red("| Unable To Join"), white(code))
+		utils.Logger(fmt.Sprintf("%s was unable to join %s", token, code))
+		fmt.Printf("%s %s %s\n", constants.White(token), constants.Red("| Unable To Join"), constants.White(code))
 	}
 
 	return nil

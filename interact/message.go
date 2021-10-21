@@ -2,6 +2,7 @@ package interact
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
@@ -10,15 +11,9 @@ import (
 	"io/ioutil"
 	"net/http"
 	"time"
-
-	"github.com/gookit/color"
 )
 
 var BadCount int
-var green = color.FgGreen.Render
-var white = color.FgWhite.Render
-var red = color.FgRed.Render
-var yellow = color.FgYellow.Render
 
 func SendMessage(ServerID string, ChannelID string, Token string, Content string) error {
 	if BadCount >= 15 {
@@ -78,13 +73,16 @@ func SendMessage(ServerID string, ChannelID string, Token string, Content string
 		// Do some parsing of the response to check for issues.
 		switch responseJson["message"] {
 		case "Missing Access":
-			fmt.Printf("%s %s\n", white(Token), red("Unable to send message make sure it is the server"))
+			utils.Logger(fmt.Sprintf("%s was not able ot send a message in %s", Token, ServerID))
+			fmt.Printf("%s %s\n", constants.White(Token), constants.Red("Unable to send message make sure it is the server"))
 			BadCount++
 		case "Missing Permissions":
-			fmt.Printf("%s %s %s\n", red(Token), yellow("is missing permissions I.E needs a role to message in"), white(ServerID))
+			utils.Logger(fmt.Sprintf("%s does not have the correct permissions to send a message in %s", Token, ServerID))
+			fmt.Printf("%s %s %s\n", constants.Red(Token), constants.Yellow("is missing permissions I.E needs a role to message in"), constants.White(ServerID))
 			BadCount++
 		case nil:
-			fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white("Message has been sent to ", ServerID))
+			utils.Logger(fmt.Sprintf("%s has sent the message %s in %s", Token, Content, ServerID))
+			fmt.Printf("%s %s %s\n", constants.Red(Token), constants.Green("Success:"), constants.White("Message has been sent to ", ServerID))
 			BadCount--
 		}
 		return nil

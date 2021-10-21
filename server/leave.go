@@ -2,10 +2,12 @@ package server
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 )
@@ -46,9 +48,11 @@ func LeaveServer(serverID string, token string) error {
 
 	switch res.StatusCode {
 	case 204:
-		fmt.Printf("%s %s %s\n", white(token), green("| Successfully Left"), white(serverID))
+		utils.Logger(fmt.Sprintf("%s has successfully left %s", token, serverID))
+		fmt.Printf("%s %s %s\n", constants.White(token), constants.Green("| Successfully Left"), constants.White(serverID))
 	default:
-		fmt.Printf("%s %s %s\n", white(token), red("| Cannot Leave"), white(serverID))
+		utils.Logger(fmt.Sprintf("%s was unable to leave %s", token, serverID))
+		log.Printf("%s %s %s\n", constants.White(token), constants.Red("| Cannot Leave"), constants.White(serverID))
 	}
 
 	return nil

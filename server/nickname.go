@@ -2,6 +2,7 @@ package server
 
 import (
 	"Raid-Client/cloudflare"
+	"Raid-Client/constants"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
@@ -55,9 +56,11 @@ func ChangeNickname(ServerID string, Token string, Nickname string) error {
 
 	switch res.StatusCode {
 	case 200:
-		fmt.Printf("%s %s %s\n", red(Token), green("Success:"), white(fmt.Sprintf("Changed nickname to %s", Nickname)))
+		utils.Logger(fmt.Sprintf("%s has successfully updated their nickname to %s", Token, Nickname))
+		fmt.Printf("%s %s %s\n", constants.Red(Token), constants.Green("Success:"), constants.White(fmt.Sprintf("Changed nickname to %s", Nickname)))
 	default:
-		fmt.Printf("%s %s\n", white(Token), red(fmt.Sprintf("Error: Unable to change nickname to %s", Nickname)))
+		utils.Logger(fmt.Sprintf("%s was unable to update their nickname to %s", Token, Nickname))
+		fmt.Printf("%s %s\n", constants.White(Token), constants.Red(fmt.Sprintf("Error: Unable to change nickname to %s", Nickname)))
 	}
 
 	return nil

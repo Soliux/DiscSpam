@@ -1,6 +1,7 @@
 package interact
 
 import (
+	"Raid-Client/constants"
 	"Raid-Client/utils"
 	"fmt"
 	"time"
@@ -18,7 +19,8 @@ func ChangeStatus() {
 			for {
 				if utils.WSConnected {
 					utils.SetStatus(utils.Status, ws)
-					fmt.Printf("%s %s\n", white(token), green("| Successfully set the status"))
+					utils.Logger(fmt.Sprintf("%s has updated their status", token))
+					fmt.Printf("%s %s\n", constants.White(token), constants.Green("| Successfully set the status"))
 					ws.Close()
 					break
 				}
