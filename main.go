@@ -19,10 +19,12 @@ import (
 )
 
 var (
-	white  = color.FgWhite.Render
-	red    = color.FgRed.Render
-	Tokens []string
-	wg     sync.WaitGroup
+	white   = color.FgWhite.Render
+	red     = color.FgRed.Render
+	Tokens  []string
+	wg      sync.WaitGroup
+	logging bool
+	proxy   bool
 )
 
 func main() {
@@ -209,6 +211,10 @@ func Help() {
 }
 
 func init() {
+	l, p := utils.Get_commandline_values()
+	logging = *l
+	proxy = *p
+
 	server.C = cache.New(60*time.Minute, 120*time.Minute)
 	tmp, err := utils.ReadTokens("./tokens.txt")
 	if err != nil {
