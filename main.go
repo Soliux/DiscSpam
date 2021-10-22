@@ -4,6 +4,7 @@ import (
 	"Raid-Client/constants"
 	"Raid-Client/interact"
 	"Raid-Client/server"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bufio"
 	"fmt"
@@ -202,6 +203,10 @@ func Input(DisplayText string) string {
 }
 
 func Help() {
+	if constants.Proxy {
+		fmt.Printf("%d Proxies Loaded\n", len(constants.Proxies))
+	}
+	fmt.Printf("%d Tokens Loaded\n", len(constants.Tokens))
 	fmt.Printf("%s %s\n", constants.White("1. Join Server - Params:"), constants.Red("<Invite Code>"))
 	fmt.Printf("%s %s\n", constants.White("2. Leave Server - Params:"), constants.Red("<Server ID>"))
 	fmt.Printf("%s %s\n", constants.White("3. Spam Message - Params:"), constants.Red("<Server ID> <Channel ID> <Message To Spam>"))
@@ -220,8 +225,14 @@ func init() {
 	constants.Proxy = *p
 
 	// Call our logger function and set the file output if needed
-	utils.SetupLogger()
+	go utils.SetupLogger()
+	if constants.Proxy {
+		tools.Populate_proxies()
+		time.Sleep(time.Millisecond * 600)
+		tools.Populate_proxies()
+	}
 
+	utils.ClearScreen()
 	server.C = cache.New(60*time.Minute, 120*time.Minute)
 	tmp, err := utils.ReadTokens("./tokens.txt")
 	if err != nil {
