@@ -16,6 +16,7 @@ var (
 
 	// Define some other variables that will exist for the runtime of the program
 	Tokens  []string
+	Proxies []string
 	Wg      sync.WaitGroup
 	Logging bool
 	Proxy   bool
