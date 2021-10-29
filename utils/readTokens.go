@@ -2,7 +2,6 @@ package utils
 
 import (
 	"bufio"
-	"fmt"
 	"os"
 )
 
@@ -22,7 +21,7 @@ func ReadTokens(path string) ([]string, error) {
 }
 
 func WriteLines(lines []string, path string) error {
-	file, err := os.Create(path)
+	file, err := os.OpenFile(path, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
 		return err
 	}
@@ -30,7 +29,7 @@ func WriteLines(lines []string, path string) error {
 
 	w := bufio.NewWriter(file)
 	for _, line := range lines {
-		fmt.Fprintln(w, line)
+		_, _ = w.WriteString(line + "\n")
 	}
 	return w.Flush()
 }
