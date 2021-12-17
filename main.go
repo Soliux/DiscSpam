@@ -227,9 +227,13 @@ func init() {
 	// Call our logger function and set the file output if needed
 	go utils.SetupLogger()
 	if constants.Proxy {
-		tools.Populate_proxies()
-		time.Sleep(time.Millisecond * 600)
-		tools.Populate_proxies()
+		utils.Logger("Proxy module starting...")
+		constants.Wg.Add(1)
+		go func() {
+			defer constants.Wg.Done()
+			tools.PopulateProxies()
+		}()
+		constants.Wg.Wait()
 	}
 
 	utils.ClearScreen()

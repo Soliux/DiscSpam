@@ -14,8 +14,8 @@ import (
 	"time"
 )
 
-func Create_http_client() *http.Client {
-	var http_client *http.Client
+func CreateHttpClient() *http.Client {
+	var httpClient *http.Client
 	if constants.Proxy {
 		proxy := constants.Proxies[rand.Intn(len(constants.Proxies))]
 		proxyURL, err := url.Parse(proxy)
@@ -27,38 +27,42 @@ func Create_http_client() *http.Client {
 			Proxy: http.ProxyURL(proxyURL),
 		}
 		// Create our client that is told to run traffic through the proxy
-		http_client = &http.Client{
+		httpClient = &http.Client{
 			Transport: transport,
 			Timeout:   time.Second * 5,
 		}
 	} else {
-		http_client = &http.Client{
+		httpClient = &http.Client{
 			Timeout: time.Second * 5,
 		}
 	}
-	return http_client
+	return httpClient
 }
 
-func Populate_proxies() {
+func PopulateProxies() {
+	fmt.Println("Populating proxies...")
 	var err error
 	constants.Proxies, err = utils.ReadTokens("./proxies.txt")
-	if err != nil {
+	if err != nil || len(constants.Proxies) == 0 {
 		utils.Logger("Unable to load in proxies from proxies.txt... scraping the web for proxies.")
 		fmt.Println("Unable to load in proxies from proxies.txt... scraping the web for proxies.")
-		Scrape_proxies()
+		ScrapeProxies()
 	}
 }
 
-func Scrape_proxies() {
+func ScrapeProxies() {
+	fmt.Println("Scraping proxies...")
 	request, err := http.Get("https://api.proxyscrape.com/?request=displayproxies&proxytype=http&timeout=10000&country=all&anonymity=all&ssl=no")
 	if err != nil {
 		log.Fatal(err)
 	}
 	// Read the data from the web page I.E Proxies
+	fmt.Println("Reading proxies...")
 	data, err := ioutil.ReadAll(request.Body)
 	if err != nil {
 		log.Fatal(err)
 	}
+	fmt.Println("Writing proxies to file...")
 	proxies := strings.TrimSuffix(string(data), "\n")
 	// Append to our proxies file, if it does not exist we are simple going to create it and then append to it.
 	file, err := os.OpenFile("./proxies.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
@@ -66,13 +70,18 @@ func Scrape_proxies() {
 		fmt.Println("Proxies File Not Found!...")
 		os.Exit(0)
 	}
+	defer file.Close()
+	// Write to our file
 
 	_, err = fmt.Fprint(file, proxies)
 	if err != nil {
 		file.Close()
 		log.Fatal(err)
 	}
+	fmt.Println("Proxies Scraped and Saved!")
 	utils.Logger("Scraped the web for proxies and added to proxies.txt")
 	fmt.Println("Proxies saved to proxies.txt")
+	// save the proxy list to constants
+	constants.Proxies, _ = utils.ReadTokens("./proxies.txt")
 
 }
