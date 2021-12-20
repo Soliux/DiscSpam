@@ -3,6 +3,7 @@ package interact
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"errors"
 	"fmt"
@@ -16,6 +17,7 @@ import (
 var cmt int
 
 func AddReaction(ChannelID string, MessageID string, Token string, Emoji string) error {
+	defer handlePanic()
 	if cmt >= 2 {
 		return errors.New("error working")
 	} else {
@@ -42,9 +44,8 @@ func AddReaction(ChannelID string, MessageID string, Token string, Emoji string)
 			"X-super-properties": []string{xprop},
 		}
 
-		client := &http.Client{
-			Timeout: 5 * time.Second,
-		}
+		client := tools.CreateHttpClient()
+		defer client.CloseIdleConnections()
 
 		res, err := client.Do(request)
 		if err != nil {

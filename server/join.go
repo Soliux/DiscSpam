@@ -3,6 +3,7 @@ package server
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
@@ -10,7 +11,6 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strings"
-	"time"
 
 	"github.com/patrickmn/go-cache"
 )
@@ -18,6 +18,7 @@ import (
 var C *cache.Cache
 
 func JoinServer(inviteCode string, token string) error {
+	defer handlePanic()
 	code := ""
 	if strings.Contains(inviteCode, "https://discord") {
 		j := strings.Split(inviteCode, "/")
@@ -50,9 +51,8 @@ func JoinServer(inviteCode string, token string) error {
 		"X-super-properties": []string{xprop},
 	}
 
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
+	client := tools.CreateHttpClient()
+	defer client.CloseIdleConnections()
 
 	res, err := client.Do(request)
 	if err != nil {
@@ -82,4 +82,10 @@ func JoinServer(inviteCode string, token string) error {
 	}
 
 	return nil
+}
+
+func handlePanic() {
+	if err := recover(); err != nil {
+
+	}
 }

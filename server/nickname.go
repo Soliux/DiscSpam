@@ -3,15 +3,16 @@ package server
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
 	"fmt"
 	"net/http"
-	"time"
 )
 
 func ChangeNickname(ServerID string, Token string, Nickname string) error {
+	defer handlePanic()
 	payload := map[string]string{
 		"nick": Nickname,
 	}
@@ -44,9 +45,8 @@ func ChangeNickname(ServerID string, Token string, Nickname string) error {
 		"X-super-properties": []string{xprop},
 	}
 
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
+	client := tools.CreateHttpClient()
+	defer client.CloseIdleConnections()
 
 	res, err := client.Do(request)
 	if err != nil {

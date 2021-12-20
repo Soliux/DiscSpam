@@ -3,16 +3,16 @@ package server
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
 	"encoding/json"
 	"fmt"
-	"log"
 	"net/http"
-	"time"
 )
 
 func LeaveServer(serverID string, token string) error {
+	defer handlePanic()
 	payload := map[string]string{"lurking": "false"}
 	payloadBuf := new(bytes.Buffer)
 	json.NewEncoder(payloadBuf).Encode(payload)
@@ -38,9 +38,9 @@ func LeaveServer(serverID string, token string) error {
 		"X-super-properties": []string{xprop},
 	}
 
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
+	client := tools.CreateHttpClient()
+	defer client.CloseIdleConnections()
+
 	res, err := client.Do(request)
 	if err != nil {
 		return err
@@ -50,9 +50,12 @@ func LeaveServer(serverID string, token string) error {
 	case 204:
 		utils.Logger(fmt.Sprintf("%s has successfully left %s", token, serverID))
 		fmt.Printf("%s %s %s\n", constants.White(token), constants.Green("| Successfully Left"), constants.White(serverID))
+	case 200:
+		utils.Logger(fmt.Sprintf("%s has successfully left %s", token, serverID))
+		fmt.Printf("%s %s %s\n", constants.White(token), constants.Green("| Successfully Left"), constants.White(serverID))
 	default:
 		utils.Logger(fmt.Sprintf("%s was unable to leave %s", token, serverID))
-		log.Printf("%s %s %s\n", constants.White(token), constants.Red("| Cannot Leave"), constants.White(serverID))
+		fmt.Printf("%s %s %s\n", constants.White(token), constants.Red("| Cannot Leave"), constants.White(serverID))
 	}
 
 	return nil

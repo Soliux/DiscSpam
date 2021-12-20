@@ -3,6 +3,7 @@ package interact
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 
 	"bytes"
@@ -70,6 +71,7 @@ func AddFriend(Token string, User string) error {
 }
 
 func RemoveFriend(Token string, UserID string) error {
+	defer handlePanic()
 	request, err := http.NewRequest("DELETE", fmt.Sprintf("https://discord.com/api/v9/users/%s/relationships/%s", "%40me", UserID), nil)
 	if err != nil {
 		return err
@@ -94,9 +96,8 @@ func RemoveFriend(Token string, UserID string) error {
 		"X-super-properties": []string{xprop},
 	}
 
-	client := &http.Client{
-		Timeout: 5 * time.Second,
-	}
+	client := tools.CreateHttpClient()
+	defer client.CloseIdleConnections()
 
 	res, err := client.Do(request)
 	if err != nil {
@@ -114,4 +115,9 @@ func RemoveFriend(Token string, UserID string) error {
 	}
 
 	return nil
+}
+
+func handlePanic() {
+	if err := recover(); err != nil {
+	}
 }

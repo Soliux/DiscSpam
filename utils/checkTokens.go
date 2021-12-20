@@ -19,6 +19,7 @@ var (
 )
 
 func CheckTokens(tokens []string) []string {
+	defer handlePanic()
 	good = 0
 	bad = 0
 	locked = 0
@@ -53,6 +54,8 @@ func CheckTokens(tokens []string) []string {
 			client := &http.Client{
 				Timeout: 5 * time.Second,
 			}
+			defer client.CloseIdleConnections()
+
 			res, err := client.Do(request)
 			if err != nil {
 				fmt.Println(err)
@@ -83,4 +86,10 @@ func CheckTokens(tokens []string) []string {
 	wg.Wait()
 	fmt.Printf("%s\n%s%s\n%s%s\n%s%s\n", constants.Green("Finished Checking: "), constants.Green("Good tokens: "), constants.Green(good), constants.Red("Bad tokens: "), constants.Red(bad), constants.Red("Locked tokens: "), constants.Red(locked))
 	return goodTokens
+}
+
+func handlePanic() {
+	if err := recover(); err != nil {
+
+	}
 }
