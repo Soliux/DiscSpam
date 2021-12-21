@@ -11,6 +11,7 @@ var TOKENS []string
 var updating bool
 
 func ChangeStatus() {
+	defer handlePanic()
 	if !updating {
 		time.Sleep(100 * time.Millisecond)
 		for _, token := range TOKENS {

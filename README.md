@@ -72,6 +72,7 @@ Add the Discord tokens to tokens.txt
 ### Roadmap
 - Proxy Support
 - [x] Add/Remove Friends
+- [x] Logger
 - Voice Chat Support
 - [x] Add Nickname Changing
 - [x] Add Ability To Change Status

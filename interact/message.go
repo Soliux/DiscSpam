@@ -3,19 +3,22 @@ package interact
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
-	"time"
+	"os"
 )
 
 var BadCount int
 
 func SendMessage(ServerID string, ChannelID string, Token string, Content string) error {
+	defer handlePanic()
 	if BadCount >= 15 {
 		return errors.New("auto anti token lock feature triggered")
 	} else {
@@ -50,12 +53,12 @@ func SendMessage(ServerID string, ChannelID string, Token string, Content string
 			"X-super-properties": []string{xprop},
 		}
 
-		client := &http.Client{
-			Timeout: 5 * time.Second,
-		}
+		client := tools.CreateHttpClient()
+		defer client.CloseIdleConnections()
 
 		res, err := client.Do(request)
-		if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) || os.IsTimeout(err) {
+			fmt.Printf("%s %s\n", constants.Yellow(Token), constants.Red("[!] Timed out"))
 			return err
 		}
 		defer res.Body.Close()
