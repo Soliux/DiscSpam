@@ -5,5 +5,5 @@ DiscSpam.exe
 tokens.txt
 old_tokens.txt
 DiscSpam.log
-*.py
-*.pyc
+test.py
+beans.py
