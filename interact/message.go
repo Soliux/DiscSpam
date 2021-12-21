@@ -6,11 +6,13 @@ import (
 	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 )
 
 var BadCount int
@@ -55,7 +57,8 @@ func SendMessage(ServerID string, ChannelID string, Token string, Content string
 		defer client.CloseIdleConnections()
 
 		res, err := client.Do(request)
-		if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) || os.IsTimeout(err) {
+			fmt.Printf("%s %s\n", constants.Yellow(Token), constants.Red("[!] Timed out"))
 			return err
 		}
 		defer res.Body.Close()

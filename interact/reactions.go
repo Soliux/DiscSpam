@@ -5,9 +5,11 @@ import (
 	"Raid-Client/constants"
 	"Raid-Client/tools"
 	"Raid-Client/utils"
+	"context"
 	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -48,7 +50,8 @@ func AddReaction(ChannelID string, MessageID string, Token string, Emoji string)
 		defer client.CloseIdleConnections()
 
 		res, err := client.Do(request)
-		if err != nil {
+		if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) || os.IsTimeout(err) {
+			fmt.Printf("%s %s\n", constants.Yellow(Token), constants.Red("[!] Timed out"))
 			return err
 		}
 

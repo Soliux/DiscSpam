@@ -6,10 +6,13 @@ import (
 	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 
 	"github.com/patrickmn/go-cache"
@@ -60,7 +63,8 @@ func JoinServer(inviteCode string, token string) error {
 	}
 
 	body, err := ioutil.ReadAll(res.Body)
-	if err != nil {
+	if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) || os.IsTimeout(err) {
+		fmt.Printf("%s %s\n", constants.Yellow(token), constants.Red("[!] Timed out"))
 		return err
 	}
 

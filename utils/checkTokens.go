@@ -3,8 +3,11 @@ package utils
 import (
 	"Raid-Client/cloudflare"
 	"Raid-Client/constants"
+	"context"
+	"errors"
 	"fmt"
 	"net/http"
+	"os"
 	"sync"
 	"time"
 )
@@ -57,8 +60,8 @@ func CheckTokens(tokens []string) []string {
 			defer client.CloseIdleConnections()
 
 			res, err := client.Do(request)
-			if err != nil {
-				fmt.Println(err)
+			if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) || os.IsTimeout(err) {
+				fmt.Printf("%s %s\n", constants.Yellow(t), constants.Red("[!] Timed out"))
 			}
 			defer res.Body.Close()
 

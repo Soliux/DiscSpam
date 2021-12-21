@@ -6,9 +6,12 @@ import (
 	"Raid-Client/tools"
 	"Raid-Client/utils"
 	"bytes"
+	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"net/http"
+	"os"
 )
 
 func ChangeNickname(ServerID string, Token string, Nickname string) error {
@@ -49,7 +52,8 @@ func ChangeNickname(ServerID string, Token string, Nickname string) error {
 	defer client.CloseIdleConnections()
 
 	res, err := client.Do(request)
-	if err != nil {
+	if errors.Is(err, context.DeadlineExceeded) || errors.Is(err, context.Canceled) || os.IsTimeout(err) {
+		fmt.Printf("%s %s\n", constants.Yellow(Token), constants.Red("[!] Timed out"))
 		return err
 	}
 	defer res.Body.Close()
