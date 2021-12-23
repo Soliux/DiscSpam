@@ -2,6 +2,7 @@ package main
 
 import (
 	"Raid-Client/constants"
+	"Raid-Client/gateway"
 	"Raid-Client/interact"
 	"Raid-Client/server"
 	"Raid-Client/tools"
@@ -12,6 +13,7 @@ import (
 	"os"
 	"os/user"
 	"runtime"
+	"strconv"
 	"strings"
 	"time"
 
@@ -115,19 +117,19 @@ func spawner(Tool string) {
 		Type := 0
 		fmt.Println("[NOTE] The status will only remain active for 2 minutes")
 		Content := Input("Enter Status Content (e.g. hello world)")
-		utils.Status = Input("Enter Status (e.g. online, idle, dnd)")
+		gateway.Status = Input("Enter Status (e.g. online, idle, dnd)")
 		Activity := strings.ToLower(Input("Enter Type (e.g. playing, watching, listening)"))
 
 		switch Activity {
 		case "playing":
-			Type = utils.ActivityGame
+			Type = gateway.ActivityGame
 		case "watching":
-			Type = utils.ActivityWatching
+			Type = gateway.ActivityWatching
 		case "listening":
-			Type = utils.ActivityListening
+			Type = gateway.ActivityListening
 		}
 
-		utils.Presence = []utils.Activity{{Name: Content, Type: utils.ActivityType(Type)}}
+		gateway.Presence = []gateway.Activity{{Name: Content, Type: gateway.ActivityType(Type)}}
 
 		constants.Wg.Add(1)
 		utils.Logger("Status change module starting...")
@@ -175,7 +177,45 @@ func spawner(Tool string) {
 			utils.WriteLines(constants.Tokens, "./tokens.txt")
 		}()
 		constants.Wg.Wait()
+	case "11", "11.", "massmention", "massping":
+		utils.Logger("MassPing module starting...")
+		constants.Wg.Add(1)
+		go func() {
+			defer constants.Wg.Done()
+			/*
+				Start Scraping
+			*/
+			MasterToken := Input("Enter Token that will be used to scrape")
+			ServerID := Input("Enter Server ID (Your token need to be in this server)")
+			ChannelID := Input("Enter Channel ID (Select a channel where most of the members have access like a #rules one)")
+			VictimChannelID := Input("Enter Channel ID where you want the MassPing to occur")
+			Amount, _ := strconv.Atoi(Input("Number of time each token will repeat (10 is solid)"))
+			ws := gateway.SetupWebSocket(MasterToken)
+			go func() {
+				err := gateway.RecieveIncomingPayloads(ws, MasterToken)
+				if err != nil {
+					fmt.Println(err)
+				}
+			}()
+			var z []gateway.Member
+			var ScrapedID []string
+			time.Sleep(time.Second * 2)
+			z = gateway.SearchGuildMembers(ws, z, ServerID, ChannelID, MasterToken, "overlap", 500) // SearchGuildMembers(ws *websocket.Conn, guildID, channelID, token, method string, delay int)
+			fmt.Printf("Fetched %d members\n", len(z))
+			ws.Close()
+			for _, k := range z {
+				ScrapedID = append(ScrapedID, k.User.ID)
+			}
+
+			/*
+				Main routine for MassPing
+			*/
+			fmt.Printf("Starting MassPing\n")
+			interact.MassPing(ServerID, VictimChannelID, ScrapedID, constants.Tokens, Amount)
+		}()
+		constants.Wg.Wait()
 	}
+
 }
 
 func Input(DisplayText string) string {
@@ -217,6 +257,7 @@ func Help() {
 	fmt.Printf("%s %s\n", constants.White("8. Add Friend - Params:"), constants.Red("<Username> i.e Wumpus#0000"))
 	fmt.Printf("%s %s\n", constants.White("9. Remove Friend - Params:"), constants.Red("<User ID>"))
 	fmt.Printf("%s %s\n", constants.White("10. Check Tokens - Params"), constants.Red("<None>"))
+	fmt.Printf("%s %s\n", constants.White("11. Mass Ping - Params"), constants.Red("<Server ID(To Scrape the users)> <Channel ID(To Scrape the users)> <Token(To Scrape the users)> <Victim Channel ID (Where the MassPing will Occur)>"))
 }
 
 func init() {
