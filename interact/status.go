@@ -2,6 +2,7 @@ package interact
 
 import (
 	"Raid-Client/constants"
+	"Raid-Client/gateway"
 	"Raid-Client/utils"
 	"fmt"
 	"time"
@@ -15,11 +16,11 @@ func ChangeStatus() {
 	if !updating {
 		time.Sleep(100 * time.Millisecond)
 		for _, token := range TOKENS {
-			ws := utils.SetupWebSocket(token)
-			go utils.RecieveIncomingPayloads(ws, token)
+			ws := gateway.SetupWebSocket(token)
+			go gateway.RecieveIncomingPayloads(ws, token)
 			for {
-				if utils.WSConnected {
-					utils.SetStatus(utils.Status, ws)
+				if gateway.WSConnected {
+					gateway.SetStatus(gateway.Status, ws)
 					utils.Logger(fmt.Sprintf("%s has updated their status", token))
 					fmt.Printf("%s %s\n", constants.White(token), constants.Green("| Successfully set the status"))
 					ws.Close()
@@ -37,12 +38,12 @@ func loopMessage() {
 		updating = true
 		for _, tkn := range TOKENS {
 			time.Sleep(100 * time.Millisecond)
-			ws := utils.SetupWebSocket(tkn)
-			go utils.RecieveIncomingPayloads(ws, tkn)
+			ws := gateway.SetupWebSocket(tkn)
+			go gateway.RecieveIncomingPayloads(ws, tkn)
 
 			for {
-				if utils.WSConnected {
-					utils.SetStatus(utils.Status, ws)
+				if gateway.WSConnected {
+					gateway.SetStatus(gateway.Status, ws)
 					ws.Close()
 					break
 				}

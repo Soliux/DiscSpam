@@ -2,8 +2,10 @@ package utils
 
 import (
 	"Raid-Client/constants"
+	"fmt"
 	"log"
 	"os"
+	"strings"
 )
 
 func SetupLogger() {
@@ -13,8 +15,15 @@ func SetupLogger() {
 	}
 }
 
-func Logger(content string) {
+func Logger(contents ...interface{}) {
 	if constants.Logging {
-		log.Print(content)
+		content := formatMessage(contents...)
+		log.Println(content)
+
 	}
+}
+func formatMessage(args ...interface{}) string {
+	msg := fmt.Sprintln(args...)
+	msg = strings.TrimRight(msg, " \n\r")
+	return msg
 }
