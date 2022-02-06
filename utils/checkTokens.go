@@ -33,7 +33,7 @@ func CheckTokens(tokens []string) []string {
 			mutex.Lock()
 			defer mutex.Unlock()
 			defer wg.Done()
-			request, err := http.NewRequest("GET", "https://discord.com/api/v9/users/@me/guild-events", nil)
+			request, err := http.NewRequest("GET", "https://discord.com/api/v9/users/@me/library", nil)
 			if err != nil {
 				fmt.Println(err)
 			}
