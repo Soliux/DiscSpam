@@ -30,7 +30,7 @@ This tool has been created in [Go](https://golang.org/). For the speed and concu
 
 ## Getting Started
 
-Getting started is really simple. Head over the the [release](https://github.com/Sympthey/DiscSpam/releases) page and download the correct version of the program for your operating system. 
+Getting started is really simple. Head over the the [release](https://github.com/Zenoryne/DiscSpam/releases) page and download the correct version of the program for your operating system. 
 
 Once you have downloaded the correct version of the program just add all your discord tokens into the `tokens.txt` file and then run the program.
 
